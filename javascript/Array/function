@@ -28,3 +28,30 @@ array.flatMap() {}
     console.log(map1);
     // expected output: Array [8, 18, 32]
     flatMap 能用于在map期间增删项目（也就是修改items的数量）。换句话说，它允许你遍历很多项使之成为另一些项（靠分别把它们放进去来处理），而不是总是一对一。从这个意义上讲，它的作用类似于 filter的对立面。只需返回一个1项元素数组以保留该项，返回一个多元素数组以添加项，或返回一个0项元素数组以删除该项。
+array.at() {}
+    新的数组方法：array.at()
+    原创 story JavaScript 2022-04-18 12:32
+    JavaScript 数组的索引是从0开始的，第一个元素的索引为0，最后一个元素的索引等于该数组的长度减1。
+
+    在之前，我们一般使用方括号通过索引访问数组元素：array[index]，如果指定的索引是一个无效值，JavaScript 数组并不会报错，而是会返回 undefined。
+
+
+
+    const array = ['this is the first element', 'this is the second element', 'this is the last element'];
+    console.log(arr[0])              // logs 'this is the first element'
+    console.log(arr[1])              // logs 'this is the second element'
+    在大多数情况下，方括号语法是通过正索引访问数组元素的好方法。
+
+    但有时我们希望从末尾而不是从头开始访问元素。例如，访问数组的最后一个元素：
+    const array = ['this is the first element', 'this is the second element', 'this is the last element'];
+    console.log(arr[arr.length - 1]) // logs 'this is the last element'
+    现在，数组提供了一个新的方法来访问数组元素：Array.prototype.at()。
+    at() 方法接收一个整数值并返回该索引的项目，允许正数和负数。负整数从数组中的最后一个项目开始倒数。
+    方括号符号没有问题，但对于后面的项目，可以调用array.at(-1)，无须再访问 array.length (参见以下示例)：
+
+    const array1 = ['this is the first element', 'this is the second element', 'this is the last element'];
+
+    console.log(arr.at(0))              // logs 'this is the first element'
+    console.log(arr.at(-2))             // logs 'this is the second element'
+    console.log(arr.at(-1))             // logs 'this is the last element'
+    上面的例子凸显了 at() 方法的简洁性和可读性。
