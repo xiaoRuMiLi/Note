@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<head>
+    <title>
+        async/await
+    </title>
+
+</head>
+<body>
+
+    <h1>async/await</h1>
+    <p> 被async 定义的函数实际上就是一个promise</p>
+    <pre>
+        <code >
+            async function asyHellworld() {
+
+                return "您好！美好世界！";
+            }
+
+            asyHellworld().then((str) => console.log(str)); // 您好！美好世界！
+        </code>
+    </pre>
+    <p> await 关键字将确保异步函数的 Promise 将在继续执行其它可能需要等待值的代码之前完成并返回结果。</p>
+    <pre>
+        <code>
+            async function asyHellworld() {
+
+                return await Promise.resolve("您好！美好世界！");
+
+            }
+
+            asyHellworld().then(console.log); // 您好！美好世界
+        </code>
+    </pre>
+
+    <p> await 只能在async 修饰的函数中出现，也就是只能在异步函数中出现,await 后面只能是一个promise对象，程序等待promise调用resolve并返回resolve的参数后程序继续往下执行</p>
+
+    <p>这段代码虽然简单，但确实显示了 await 关键字的用法，以及它应该如何在函数体中使用 Promise 对象。 接下来为了让代码更容易理解，去掉代码中的 Promise 语法，如下：</p>
+    <pre>
+        <code>
+            async function asyHellworld() {
+
+                return "您好！美好世界！";
+
+            }
+
+            async function printHello() {
+
+                const strHello = await asyHellworld();
+
+                console.log(strHello);
+
+            }
+
+            printHello();
+        </code>
+    </pre>
+
+    <p>
+        上面这段代码可以更加直观的看清楚 async 和 await 的使用。通常 async 和 await 是用来处理异步操作，是把异步变为同步的一种方法。 async 声明一个 function 来表示这个异步函数，await 用于等待函数中某个异步操作执行完成。 通过上面的介绍，对 async 和 await 有一个初步的认识，那么能用来做什么呢？ await 关键字将确保异步函数的 Promise 将在继续执行其它可能需要等待值的代码之前完成并返回结果。 因此，在处理AJAX异步请求的时候，如在VUE项目中，通常处理的方式如下：
+    </p>
+    <pre>
+        <code>
+            login(username, password).then((loginResult) => {
+
+                // 登录请求发出后的处理请求
+
+                console.log("登录成功！");
+            }
+        </code>
+    </pre>
+    <p>
+        而使用 await 就可以这样来处理：
+    </p>
+
+    <pre>
+        <code>
+
+            const loginResult = await login(username, password);
+
+            console.log(loginResult);
+        </code>
+    </pre>
+
+    <p>
+        在这里可以看出，对于要处理由多个 Promise 组成的 then 链的时候，优势就能体现出来了。
+
+         还有一个常用的用途，是实现程序的暂停，即 sleep 方法，实现代码如下
+    </p>
+    <pre>
+        <code>
+
+            const sleep = (ms) => {
+                return new Promise((resolve) => setTimeout(resolve, ms));
+            };
+
+            (async () => {
+                console.log("开始执行，10秒打印你好");
+                await sleep(10 * 1000);
+                console.log("你好");
+            })();
+        </code>
+    </pre>
+    <p>
+        关于async/await是Promise的语法糖： 如果不使用async/await的话，Promise就需要通过链式调用来依次执行then之后的代码：
+    </p>
+    <pre>
+        <code>
+
+            function counter(n){
+                return new Promise((resolve, reject) => {
+                resolve(n + 1);
+                });
+            }
+
+            function adder(a, b){
+                return new Promise((resolve, reject) => {
+                resolve(a + b);
+                });
+            }
+
+            function delay(a){
+                return new Promise((resolve, reject) => {
+                setTimeout(() => resolve(a), 1000);
+                });
+            }
+            // 链式调用写法
+            function callAll(){
+                counter(1)
+                   .then((val) => adder(val, 3))
+                   .then((val) => delay(val))
+                   .then(console.log);
+            }
+            callAll();//5
+        </code>
+    </pre>
+    <p>
+       虽然相比于回调地狱来说，链式调用确实顺眼多了。但是其呈现仍然略繁琐了一些。而async/await的出现，就使得我们可以通过同步代码来达到异步的效果：
+    </p>
+    <pre>
+        <code>
+            async function callAll(){
+                const count = await counter(1);
+                const sum = await adder(count + 3);
+                console.log(await delay(sum));
+            }
+            callAll();// 5
+
+        </code>
+    </pre>
+    <p>
+        promise让异步执行看起来更清晰明了，通过then让异步执行结果分离出来。
+        async/await其实是基于Promise的。async函数其实是把promise包装了一下。使用async函数可以让代码简洁很多，不需要promise一样需要些then，不需要写匿名函数处理promise的resolve值，也不需要定义多余的data变量，还避免了嵌套代码。
+        async函数是Generator函数的语法糖。async函数的返回值是 promise 对象，这比 Generator 函数的返回值是 Iterator 对象方便多了。同时，我们还可以用await来替代then方法指定下一步的操作。
+        感觉Promise+async的操作最为常见。因为Generator被async替代了呀~
+    </p>
+
+    <details>
+        <summary>promise 的生命周期</summary>
+
+        <p> 每个Promise都会经历的生命周期是： 进行中（pending） - 此时代码执行尚未结束，所以也叫未处理的（unsettled） 已处理（settled） - 异步代码已执行结束 已处理的代码会进入两种状态中的一种： 已完成（fulfilled） - 表明异步代码执行成功，由resolve()触发 已拒绝（rejected）- 遇到错误，异步代码执行失败 ，由reject()触发 因此，pending，fulfilled, rejected就是Promise中的三种状态啦~ 大家一定要牢记，在Promise中，要么包含resolve()来表示Promise的状态为fulfilled,要么包含reject()来表示Promise的状态为rejected。不然我们的Promise就会一直处于pending的状态，直至程序崩溃...</p>
+
+        <p>All content and graphics on this web site are the property of the company Refsnes Data.</p>
+
+    </details>
+    <a href="https://mp.weixin.qq.com/s/SHM58h36sCtITU0H1Q49Cw">传送门</a>
+    <a href="https://m.jb51.net/article/219743.htm">传送门</a>
+</body>
+</html>
+
+
