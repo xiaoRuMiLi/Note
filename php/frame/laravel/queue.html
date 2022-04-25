@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+    <head>
+        <title> queue </title>
+    </head>
+    <body>
+        <h1> queue </h1>
+        <h3> 队列类使用方法 </h3>
+        <p>
+            队列类生成以后，通过SynUser::dispatch('发送请求到b系统生成账号') 其中SynUser为刚刚创建的队列类<br>
+            dispatch方法相当于执行了该类的构造方法再执行handle方法。但是此时只是推送了一个对列，队列还没有执行<br>
+            如果该队列使用的是database作为驱动，那么只是保存在jobs数据表中一条数据。队列启动了才会执行SynUser类中的handle方法。<br>
+            执行php artisan queue:work命令，开始启默认队列,此时开始消费队列数据。jobs中的队列数据被执行，执行的是SynUser类中的handle方法,<br>
+            执行不成功的队列会存入到failed_jobs数据表中。如果你有多个对列那么可以执行php artisan queue:work --queue=default, php artisan queue:work --queue=other 指定队列名来消费对应的额队列。
+        </p>
+        <h3> ShouldQueue 接口 </h3>
+        <p> 所有的队列，或者mail notification 实现ShouldQueue 接口的都会被推入队列,不会被同步执行。只有php artisan queue:work 命令后才会被执行。</p>
+        <pre>
+            <code>
+                // 继承ShouldQueue 这个接口可以自动推动到队列
+                class TestMail extends Mailable implements ShouldQueue
+                {
+                    use Queueable, SerializesModels;
+                    public $data;
+                    /**
+                     * Create a new message instance.
+                     *
+                     * @return void
+                     */
+                    public function __construct($data)
+                    {
+                        /**
+                        |   在build方法中 $this->view(**.blade), **.bladew文件中可以{{data['attribute']}} 直接访问到该变量,
+                        |   需要导入额外的变量可以使用$this->view(**.blade)->with(['elseVar' => value])
+                        */
+                        $this->data = $data;
+                    }
+
+                    /**
+                     * Build the message.
+                     *
+                     * @return $this
+                     */
+                    public function build()
+                    {
+                        // 对应到resources/views/emails/test.blade.php 这个文件
+                        return $this->view('emails.test1')
+                        ->with([
+                            'msg' => '夹带在其中的变量，将会被渲染',
+                        ]);
+                    }
+                }
+            </code>
+        </pre>
+        <h3> 队列的分发 </h3>
+            <p>
+                onQueue方法可以将某个任务分配到指定的队列。
+            </p>
+        <pre>
+            <code>
+                // 以下的任务将被委派到默认队列...
+                    Job::dispatch();
+
+                // 以下任务将被委派到 "emails" 队列...
+                Job::dispatch()->onQueue('emails');
+
+            </code>
+
+        </pre>
+        <h3> 任务类的结构 </h3>
+        <p>
+            php artisan make:job ProcessPodcast 命令创建名称为ProcessPodcast的队列类，整个就是__construct 方法传入必要的参数，<br>
+            在handle中调用$this->$podcast来处理相关的逻辑。
+        </p>
+        <pre>
+            <code>
+                namespace App\Jobs;
+                use App\Models\Podcast;
+                use App\Services\AudioProcessor;
+                use Illuminate\Bus\Queueable;
+                use Illuminate\Contracts\Queue\ShouldQueue;
+                use Illuminate\Foundation\Bus\Dispatchable;
+                use Illuminate\Queue\InteractsWithQueue;
+                use Illuminate\Queue\SerializesModels;
+
+                class ProcessPodcast implements ShouldQueue
+                {
+                    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+                    protected $podcast;
+
+                    /**
+                     * 创建任务实例
+                     *
+                     * @param  Podcast  $podcast
+                     * @return void
+                     */
+                    public function __construct(Podcast $podcast)
+                    {
+                        // 可以用依赖注入的方式
+                        $this->podcast = $podcast;
+
+                    }
+
+                    /**
+                     * 执行任务
+                     *
+                     * @param  AudioProcessor  $processor
+                     * @return void
+                     */
+                    public function handle(AudioProcessor $processor)
+                    {
+                        // 任务的处理逻辑代码，dosomething
+                    }
+                }
+            </code>
+
+        </pre>
+    <a href="https://www.cnblogs.com/shifu204/p/11730558.html"> 传送门1 </a> <a href="https://laravelacademy.org/post/22249">传送门2比官方文档容易理解</a>
+    </body>
+</html>

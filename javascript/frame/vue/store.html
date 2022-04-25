@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<head>
+    <title> store </title>
+
+</head>
+<body>
+    <h1> Store </h1>
+    <h2> 本人的理解 </h2>
+    <p>
+        store 是对全局性数据的存储，在VUE项目中的任何位置都可以访问。 <br>
+        store 对数据不是永久存储的刷新页面后会被重置，一般重置的方式就是从storage中调用。要永久存储的数据还是要存储在storage中<br>
+        store 是可以触发setter的，某个值改变后，可以触发其它引用该值的组件重新渲染。意思是页面1修改了store中data的某个数据，页面2 中引用该数据的组件会相应的改变。
+
+    </p>
+</body>
+</html>

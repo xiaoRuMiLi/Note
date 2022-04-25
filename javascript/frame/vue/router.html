@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+    <head>
+    <title>
+        router
+    </title>
+    </head>
+    <body>
+        <h1> router </h1>
+        <h2> Vue Router 的params和query </h2>
+        <pre>
+            <code>
+                //$router : 路由操作对象，只写对象
+                //$route :  路由信息对象，只读对象
+                //操作 路由跳转
+                this.$router.push({
+                        name:'hello',
+                        params:{
+                            name:'word',
+                            age:'30'
+                        }
+                })
+                //读取 路由参数接收
+                this.name = this.$route.params.name;
+                this.age = this.$route.params.age;
+            </code>
+        </pre>
+        <p>
+            1·query传递参数 （该方法的参数是放在URL的？后的）
+            query使用name来引入也可以传参，使用path也可以
+
+        </p>
+
+        <pre>
+            <code>
+                //query传参，使用name跳转
+                this.$router.push({
+                    name:'second',
+                    query: {
+                        queryId:'20201021',
+                        queryName: 'query'
+                    }
+                })
+
+                //query传参，使用path跳转
+                this.$router.push({
+                    path:'second',
+                    query: {
+                        queryId:'20201021',
+                        queryName: 'query'
+                    }
+                })
+
+                //query传参接收
+                this.queryName = this.$route.query.queryName;
+                this.queryId = this.$route.query.queryId;
+            </code>
+        </pre>
+
+        <p>
+            2·params传递参数
+            使用params传参只能使用name进行引入
+        </p>
+        <pre>
+            <code>
+                //params传参 使用name
+                this.$router.push({
+                  name:'second',
+                  params: {
+                    id:'20201021',
+                     name: 'query'
+                  }
+                })
+
+                //params接收参数
+                this.id = this.$route.params.id ;
+                this.name = this.$route.params.name ;
+
+                //路由
+                {
+                path: '/second/:id/:name',
+                name: 'second',
+                component: () => import('@/view/second')
+                }
+            </code>
+        </pre>
+        <p>
+            注意点：
+            1.params是路由的一部分,必须要在路由后面添加参数名。query是拼接在url后面的参数，没有也没关系。
+            2.params一旦设置在路由，params就是路由的一部分，如果这个路由有params传参，但是在跳转的时候没有传这个参数，会导致跳转失败或者页面会没有内容。
+
+            结论：
+            1.传参可以使用params和query两种方式。
+            2.使用params传参只能用name来引入路由，即push里面只能是name:’xxxx’,不能是path:’/xxx’,因为params只能用name来引入路由，如果这里写成了path，接收参数页面会是undefined。
+            3.使用query传参使用path来引入路由。
+            4.params是路由的一部分,必须要在路由后面添加参数名。query是拼接在url后面的参数，没有也没关系。
+            5.直白的来说query相当于get请求，页面跳转的时候，可以在地址栏看到请求参数，而params相当于post请求，参数不会再地址栏中显示
+
+            作者：十一点后不在线
+            链接：https://www.jianshu.com/p/ac9198246a5f
+            来源：简书
+            著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+        </p>
+
+    </body>
+</html>
