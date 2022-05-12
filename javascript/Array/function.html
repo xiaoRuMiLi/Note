@@ -1,5 +1,11 @@
-
-array.flatMap() {}
+<!DOCTYPE html>
+<head>
+    <title>Array function</title>
+</head>
+<body>
+<h1>数组常用方法</h1>
+<h3> array.flatMap </h3>
+<p>
     更灵活的 Map ：array.flatMap()
     原创 story JavaScript 2022-04-15 09:40
     map() 方法创建一个新数组，这个新数组由原数组中的每个元素都调用一次提供的函数后的返回值组成。
@@ -28,7 +34,9 @@ array.flatMap() {}
     console.log(map1);
     // expected output: Array [8, 18, 32]
     flatMap 能用于在map期间增删项目（也就是修改items的数量）。换句话说，它允许你遍历很多项使之成为另一些项（靠分别把它们放进去来处理），而不是总是一对一。从这个意义上讲，它的作用类似于 filter的对立面。只需返回一个1项元素数组以保留该项，返回一个多元素数组以添加项，或返回一个0项元素数组以删除该项。
-array.at() {}
+</p>
+<h3>array.at</h3>
+<p>
     新的数组方法：array.at()
     原创 story JavaScript 2022-04-18 12:32
     JavaScript 数组的索引是从0开始的，第一个元素的索引为0，最后一个元素的索引等于该数组的长度减1。
@@ -55,3 +63,61 @@ array.at() {}
     console.log(arr.at(-2))             // logs 'this is the second element'
     console.log(arr.at(-1))             // logs 'this is the last element'
     上面的例子凸显了 at() 方法的简洁性和可读性。
+</p>
+<h3>array.groupBy 分组</h3>
+<p>
+    假设我们有一个员工列表，其中每个员工都是一个具有 2 个属性的对象：name 和 age。
+    const people = [
+      { name: 'Alice', age: 21 },
+      { name: 'Max', age: 20 },
+      { name: 'Jane', age: 20 }
+    ];
+    现在，我们需要对其进行按 age 分类，最终实现输出结果如下：
+    const groupedPeople = {
+      20: [
+        { name: 'Max', age: 20 },
+        { name: 'Jane', age: 20 }
+      ],
+      21: [
+        { name: 'Alice', age: 21 }
+      ]
+    }
+    为了简化我们的代码，数组又提供了一个新的方法来对数组按属性进行分类：Array.prototype.groupBy()。
+    <pre>
+        <code>
+            const groupedPeople = people.groupBy(({ age }) => age)
+            // groupedPeople is:
+            // {
+            //   20: [
+            //     { name: 'Max', age: 20 },
+            //     { name: 'Jane', age: 20 }
+            //   ],
+            //   21: [
+            //    { name: 'Alice', age: 21 }
+            //   ]
+            // }
+        </code>
+    </pre>
+    <p>
+        同时也支持按条件自定义分类
+    </p>
+    <pre>
+        <code>
+            const groupedPeople = people.groupBy(({ age }) => age <= 20? 'a': 'b')
+            // groupedPeople is:
+            // {
+            //   'a': [
+            //     { name: 'Max', age: 20 },
+            //     { name: 'Jane', age: 20 }
+            //   ],
+            //   'b': [
+            //    { name: 'Alice', age: 21 }
+            //   ]
+            // }
+        </code>
+
+    </pre>
+</p>
+
+</body>
+</html>
