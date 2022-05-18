@@ -1,0 +1,55 @@
+<!Doctype html>
+<head>
+    <title> git </title>
+</head>
+<body>
+    <h1> 报错处理 </h1>
+    <h2> Your local changes to the following files would be overwritten by merge </h2>
+    <p> 原因是拉取远程仓库的时候本地版本比远程仓科还要新<br>
+    解决方案: <br>
+    根据是否要保存本地修改，有以下两种解决方案<br>
+    <h3>1  保留修改 </h3><br>
+    执行以下三条命令<br>
+    git stash #封存修改<br>
+    git pull origin master<br>
+    git stash pop #把修改还原<br>
+    <h3> 2  不保留修改 </h3> <br>
+    git reset --hard <br>
+    git pull origin master<br>
+    </p>
+    <a href="https://blog.csdn.net/ydm19891101/article/details/104505624/"> 封存和回退 </a>
+
+    <h2> cannot lock ref 'refs/remotes/origin/master': unable to resolve reference 'refs/remotes/origin/master': reference broken </h2>
+        <h3> 解决方法 </h3>
+        <p>
+            **第一步：**删除到.git目录下的master文件 <br>
+            rm ./.git/refs/remotes/origin/master<br>
+
+            **第二步：**抓取远程仓库最新代码<br>
+            git fetch<br>
+
+            **第三步：**远程分支内容合并到本地master分支下<br>
+            git merge origin/master<br>
+            至此，成功将远程的最新代码，pull到本地<br>
+        </p>
+        <a href="https://blog.csdn.net/weixin_42168046/article/details/103649904"> 传送门 </a>
+
+    <h2> Merge branch 'master' of github.com:xiaoRuMiLi/rapairStaff
+        # Please enter a commit message to explain why this merge is necessary,
+        # especially if it merges an updated upstream into a topic branch.
+        #
+        # Lines starting with '#' will be ignored, and an empty message aborts
+        # the commit.
+    </h2>
+    <h3> 这时候要求输入一段命令 </h3>
+    <p> 即：请输入提交消息来解释为什么这种合并是必要的<br>
+    git 在pull或者合并分支的时候有时会遇到这个界面。可以不管(直接下面3,4步)，如果要输入解释的话就需要:<br>
+    1.按键盘字母 i 进入insert模式<br>
+    2.修改最上面那行黄色合并信息,可以不修改<br>
+    3.按键盘左上角"Esc"<br>
+    4.输入" :wq",冒号+wq,按回车键即可<br>
+    </p>
+
+
+</body>
+</html>

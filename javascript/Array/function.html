@@ -6,82 +6,90 @@
 <h1>数组常用方法</h1>
 <h3> array.flatMap </h3>
 <p>
-    更灵活的 Map ：array.flatMap()
-    原创 story JavaScript 2022-04-15 09:40
-    map() 方法创建一个新数组，这个新数组由原数组中的每个元素都调用一次提供的函数后的返回值组成。
-    const array1 = [1, 4, 9, 16];
-    // pass a function to map
-    const map1 = array1.map(x => x * 2);
-    console.log(map1);
-    // expected output: Array [2, 8, 18, 32]
-    但有时，我们需要跳过数组中的某些元素，以上面的例子为例，当我们需要跳过元素 1 时，可以结合 filter 方法：
-    const array1 = [1, 4, 9, 16];
+    更灵活的 Map ：array.flatMap()<br>
+    原创 story JavaScript 2022-04-15 09:40<br>
+    map() 方法创建一个新数组，这个新数组由原数组中的每个元素都调用一次提供的函数后的返回值组成。<br>
+    const array1 = [1, 4, 9, 16];<br>
+    // pass a function to map<br>
+    const map1 = array1.map(x => x * 2);<br>
+    console.log(map1);<br>
+    // expected output: Array [2, 8, 18, 32]<br>
+    但有时，我们需要跳过数组中的某些元素，以上面的例子为例，当我们需要跳过元素 1 时，可以结合 filter 方法：<br>
+    const array1 = [1, 4, 9, 16];<br>
 
-    // pass a function to map
-    const map1 = array1
-        .filter(x => x !== 1)
-        .map(x => x * 2);
+    // pass a function to map<br>
+    const map1 = array1<br>
+        .filter(x => x !== 1)<br>
+        .map(x => x * 2);<br>
 
-    console.log(map1);
-    // expected output: Array [8, 18, 32]
-    使用 map 和 filter 结合的方式固然可以解决我们的需求，但多个方法的结合让代码看起来不那么简洁易读，有没有更简短的方式来实现呢？
+    console.log(map1);<br><br>
+    // expected output: Array [8, 18, 32]<br>
+    使用 map 和 filter 结合的方式固然可以解决我们的需求，但多个方法的结合让代码看起来不那么简洁易读，有没有更简短的方式来实现呢？<br>
 
-    答案是肯定的。使用 flatMap 方法，flatMap() 方法首先使用映射函数映射每个元素，然后将结果压缩成一个新数组。它与 map 连着深度值为 1 的 flat 几乎相同，但 flatMap 通常在合并成一种方法的效率稍微高一些。
-    const array1 = [1, 4, 9, 16];
-    // pass a function to map
-    const map1 = array1.flatMap(x => x === 1? [] :[ x*2 ])
+    答案是肯定的。使用 flatMap 方法，flatMap() 方法首先使用映射函数映射每个元素，然后将结果压缩成一个新数组。它与 map 连着深度值为 1 的 flat <br>几乎相同，但 flatMap 通常在合并成一种方法的效率稍微高一些。<br>
+    const array1 = [1, 4, 9, 16];<br>
+    // pass a function to map<br>
+    const map1 = array1.flatMap(x => x === 1? [] :[ x*2 ])<br>
 
-    console.log(map1);
-    // expected output: Array [8, 18, 32]
-    flatMap 能用于在map期间增删项目（也就是修改items的数量）。换句话说，它允许你遍历很多项使之成为另一些项（靠分别把它们放进去来处理），而不是总是一对一。从这个意义上讲，它的作用类似于 filter的对立面。只需返回一个1项元素数组以保留该项，返回一个多元素数组以添加项，或返回一个0项元素数组以删除该项。
+    console.log(map1);<br>
+    // expected output: Array [8, 18, 32]<br>
+    flatMap 能用于在map期间增删项目（也就是修改items的数量）。换句话说，它允许你遍历很多项使之成为另一些项（靠分别把它们放进去来处理），而不是总是一对一。从这个意义上讲，它的作用类似于 filter的对立面。只需返回一个1项元素数组以保留该项，返回一个多元素数组以添加项，或返回一个0项元素数组以删除该项。<br>
 </p>
 <h3>array.at</h3>
 <p>
-    新的数组方法：array.at()
-    原创 story JavaScript 2022-04-18 12:32
-    JavaScript 数组的索引是从0开始的，第一个元素的索引为0，最后一个元素的索引等于该数组的长度减1。
+    新的数组方法：array.at()<br>
+    原创 story JavaScript 2022-04-18 12:32<br>
+    JavaScript 数组的索引是从0开始的，第一个元素的索引为0，最后一个元素的索引等于该数组的长度减1。<br>
 
-    在之前，我们一般使用方括号通过索引访问数组元素：array[index]，如果指定的索引是一个无效值，JavaScript 数组并不会报错，而是会返回 undefined。
+    在之前，我们一般使用方括号通过索引访问数组元素：array[index]，如果指定的索引是一个无效值，JavaScript 数组并不会报错，而是会返回 undefined。<br>
 
 
 
-    const array = ['this is the first element', 'this is the second element', 'this is the last element'];
-    console.log(arr[0])              // logs 'this is the first element'
-    console.log(arr[1])              // logs 'this is the second element'
-    在大多数情况下，方括号语法是通过正索引访问数组元素的好方法。
+    const array = ['this is the first element', 'this is the second element', 'this is the last element'];<br>
+    console.log(arr[0])              // logs 'this is the first element'<br>
+    console.log(arr[1])              // logs 'this is the second element'<br>
+    在大多数情况下，方括号语法是通过正索引访问数组元素的好方法。<br>
 
-    但有时我们希望从末尾而不是从头开始访问元素。例如，访问数组的最后一个元素：
-    const array = ['this is the first element', 'this is the second element', 'this is the last element'];
-    console.log(arr[arr.length - 1]) // logs 'this is the last element'
-    现在，数组提供了一个新的方法来访问数组元素：Array.prototype.at()。
-    at() 方法接收一个整数值并返回该索引的项目，允许正数和负数。负整数从数组中的最后一个项目开始倒数。
-    方括号符号没有问题，但对于后面的项目，可以调用array.at(-1)，无须再访问 array.length (参见以下示例)：
+    但有时我们希望从末尾而不是从头开始访问元素。例如，访问数组的最后一个元素：<br>
+    const array = ['this is the first element', 'this is the second element', 'this is the last element'];<br>
+    console.log(arr[arr.length - 1]) // logs 'this is the last element'<br>
+    现在，数组提供了一个新的方法来访问数组元素：Array.prototype.at()。<br>
+    at() 方法接收一个整数值并返回该索引的项目，允许正数和负数。负整数从数组中的最后一个项目开始倒数。<br>
+    方括号符号没有问题，但对于后面的项目，可以调用array.at(-1)，无须再访问 array.length (参见以下示例)：<br>
 
-    const array1 = ['this is the first element', 'this is the second element', 'this is the last element'];
+    const array1 = ['this is the first element', 'this is the second element', 'this is the last element'];<br>
 
-    console.log(arr.at(0))              // logs 'this is the first element'
-    console.log(arr.at(-2))             // logs 'this is the second element'
-    console.log(arr.at(-1))             // logs 'this is the last element'
-    上面的例子凸显了 at() 方法的简洁性和可读性。
+    console.log(arr.at(0))              // logs 'this is the first element'<br>
+    console.log(arr.at(-2))             // logs 'this is the second element'<br>
+    console.log(arr.at(-1))             // logs 'this is the last element'<br>
+    上面的例子凸显了 at() 方法的简洁性和可读性。<br>
 </p>
-<h3>array.groupBy 分组</h3>
+<h3>array.groupBy 分组</h3><br>
 <p>
-    假设我们有一个员工列表，其中每个员工都是一个具有 2 个属性的对象：name 和 age。
-    const people = [
-      { name: 'Alice', age: 21 },
-      { name: 'Max', age: 20 },
-      { name: 'Jane', age: 20 }
-    ];
-    现在，我们需要对其进行按 age 分类，最终实现输出结果如下：
-    const groupedPeople = {
-      20: [
-        { name: 'Max', age: 20 },
-        { name: 'Jane', age: 20 }
-      ],
-      21: [
-        { name: 'Alice', age: 21 }
-      ]
-    }
+    假设我们有一个员工列表，其中每个员工都是一个具有 2 个属性的对象：name 和 age。<br>
+    <pre>
+        <code>
+            const people = [
+              { name: 'Alice', age: 21 },
+              { name: 'Max', age: 20 },
+              { name: 'Jane', age: 20 }
+            ];
+        </code>
+    </pre>
+    现在，我们需要对其进行按 age 分类，最终实现输出结果如下：<br>
+    <pre>
+        <code>
+            const groupedPeople = {
+              20: [
+                { name: 'Max', age: 20 },
+                { name: 'Jane', age: 20 }
+              ],
+              21: [
+                { name: 'Alice', age: 21 }
+              ]
+            }
+        </code>
+    </pre>
     为了简化我们的代码，数组又提供了一个新的方法来对数组按属性进行分类：Array.prototype.groupBy()。
     <pre>
         <code>
