@@ -84,6 +84,25 @@
             </code>
         </pre>
         <p>
+            mode 属性，  默认为哈希模式路由中会包含#号如果不希望看到这个#号，可以使用历史模式, mode: "history"<br>
+            使用历史模式上线后刷新页面会报404. 解决方法为在项目nginx配置文件中，增加下面行
+            <pre>
+                <code>
+                location /{
+                  # 匹配staff.weixiubang.club/******
+                  # 将访问api以外的所有路由都匹配到如下
+                  root /www/wwwroot/staff.weixiubang.club/dist;
+                  # 先将/作为文件配匹配$uri， 如果未匹配到再作为文件夹$uri/，还是没有匹配到那么就匹配到 @router;
+                  try_files $uri $uri/ @router;
+                  index index.html;
+                }
+                location @router {
+                    rewrite ^.*$ /index.html last;
+                }
+                </code>
+            </pre>
+        </p>
+        <p>
             注意点：
             1.params是路由的一部分,必须要在路由后面添加参数名。query是拼接在url后面的参数，没有也没关系。
             2.params一旦设置在路由，params就是路由的一部分，如果这个路由有params传参，但是在跳转的时候没有传这个参数，会导致跳转失败或者页面会没有内容。

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+    <title> 控制器 </title>
+
+</head>
+<body>
+    <h3> 资源控制器 </h3>
+    <p>
+        <pre>
+            资源控制器处理的动作
+            请求方式    URI路径   控制器方法   路由名称    作用
+            GET /posts  index   posts.index 获取所有列表的页面　
+            GET /posts/create   create  posts.create    创建数据的页面
+            POST    /posts  store   posts.store 提交创建的数据
+            GET /posts/{post}   show    posts.show  获取单个数据的页面
+            GET /posts/{post}/edit  edit    posts.edit  获取要修改数据的页面
+            PUT/PATCH   /posts/{post}   update  posts.update    提交要修改数据
+            DELETE  /posts/{post}   destroy posts.destroy   删除数据
+        </pre>
+    </p>
+    <a href="http://t.zoukankan.com/f-rt-p-9900813.html"> 资源控制器 </a>
+</body>
+</html>

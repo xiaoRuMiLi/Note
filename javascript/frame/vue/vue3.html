@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<head>
+    <title> vue3 </title>
+</head>
+<body>
+    <h3> watch </h3>
+    <pre>
+        <code>
+            import { defineComponent, reactive, watch, Fragment } from 'vue';
+const demo = reactive({
+  name: '小王',
+  info: {
+    name: '',
+    work: {
+      type: '程序员',
+      address: '七宝',
+    },
+  },
+});
+
+export default defineComponent({
+  name: 'Testthree',
+  data() {
+    return {
+      year: '2021',
+      people: {
+        name: '小美',
+        work: '在职',
+      },
+    };
+  },
+  watch: {
+    // // vue2写法，这种写法不能监听除了data之外的变量
+    // year(value) {
+    //   // 基本用法
+    //   console.log(value);
+    // },
+    // people: {
+    //   handler(value) {
+    //     console.log(value);
+    //   },
+    //   deep: true, // 会监听孙属性，曾孙属性
+    // },
+  },
+  mounted() {
+    // watch(demo, newValue => {
+    //   // 推荐这种，vue3写法支持使用多个watch函数组合使用
+    //   //监听整个对象,孙属性变更也会触发
+    //   console.log(newValue);
+    // });
+    // watch(() => demo.name, newValue => {
+    //   //注意:此时的watch第一个参数是一个箭头函数。
+    //   //监听对象中的某个属性
+    //   console.log(newValue);
+    // });
+    // watch(() => ({ ...demo }), newValue => {
+    //   //监听对象中的子属性，孙属性变更不会触发
+    //   console.log(newValue);
+    // });
+    // watch(() => demo, newValue => {
+    //   //监听对象中的所有属性，作用和第一种监听整个对象一样
+    //   console.log(newValue);
+    // }, { deep: true });
+    // watch(demo.info, newValue => {
+    //   //监听整个对象,孙属性变更也会触发
+    //   console.log(newValue);
+    // });
+    watch([() => this.year, demo], ([v1, v2], [oldName, oldNums]) => {
+      //注意:此时的第一个参数是一个数组
+      //组合监听,监听对象中的所有属性
+      console.log(v1);
+      console.log(v2);
+    });
+  },
+  render() {
+    return (
+      <Fragment>
+        <h2>watch监听器的几种写法</h2>
+        <div onClick={() => {
+          // this.year = '2022';
+          // this.people.name = '小帅';
+          // this.people = {
+          //   name: '小张',
+          //   work: '入职',
+          // };
+          // demo.name = '前段小伙';
+          // demo.info.name = 'jack';
+          // demo.info= {
+          //   name: 'lily',
+          //   work: {},
+          // };
+          demo.info.work.address = '闵行';
+        }}>更新</div>
+      </Fragment >
+    );
+  },
+});
+
+        </code>
+    </pre>
+    <a href="https://blog.csdn.net/qq_45406325/article/details/125476866">watch 用法</a>
+
+    <h3> 响应始对象 </h3>
+    <h4>  reactive </h4>
+    <p>
+    对reactive 中的某个属性为数组的响应式。 如果丢失响应的话，可以这样赋值，
+    </p>
+    <pre>
+    <code>
+        const state = reactive({
+         arr : [1,2]
+        })
+
+        const handle = function() {
+             const newArr = [2,3];
+            // 赋值后失去了响应，没有渲染页面
+            state.arr = newArr ;
+            // 可以采用下面的方法
+            state.arr.length = 0;
+            state.arr.push(2);
+            state.arr.push(3);
+
+        }
+    </code>
+    </pre>
+    <p>
+        因为state.arr 是一个相依式对象
+        被赋值为newArr后，newArr是非响应式对象，所以失去了响应
+    </p>
+</body>
+</html>

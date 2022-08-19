@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+    <head>
+        <title>
+            route
+        </title>
+    </head>
+    <body>
+    <h1>
+        App.vue 写法
+
+    </h1>
+    <h3>
+        vue3 和vue2 App.vue 写法有不同主要是keepalive 组件 和route view 组件用法有所不同
+    </h3>
+    <p>
+        vue2 中route-view 组件<br>
+    </p>
+        <pre>
+            <code>
+                <template>
+              <!-- vue2.x
+                 -->
+                <keep-alive>
+                <router-view v-if="$route.meta.keepAlive"/>
+                </keep-alive>
+                <router-view v-if="!$route.meta.keepAlive"/>
+                </template>
+            </code>
+        </pre>
+    <p>
+        vue3
+    </p>
+        <pre>
+            <code>
+                &lt;template&gt;
+                <!-- vue3.0
+                 -->
+                <router-view v-slot="{ Component }">
+                <keep-alive>
+                <component :is="Component"v-if="$route.meta.keepAlive"/>
+                </keep-alive>
+                <component :is="Component"v-if="!$route.meta.keepAlive"/>
+                </router-view>
+                &lt;/template&gt;
+            </code>
+        </pre>
+    <h3>
+        组件配置缓存
+    </h3>
+    <p>
+        通常我们会对vue的⼀个页⾯进⾏缓存，然⽽有些时候我们仅需要缓存页⾯的某⼀个组件，或是在使⽤动态组件compnent进⾏组件切换时<br>
+        需要对组件进⾏缓存。<br>
+    </p>
+    <p>
+        缓存页⾯指定组件
+        当⽤于App.vue时，所有的路由对应的页⾯为项⽬所对应的组件，使⽤⽅法如下：
+        在keep-alive组件上使⽤include或exclude属性，如下：使⽤include
+        代表将缓存name为testKA的组件，
+    </p>
+    <pre>
+        <code>
+            <router-view v-slot="{ Component }">
+            <keep-alive include="testKA">
+            <component :is="Component"/>
+            </keep-alive>
+            </router-view>
+        </code>
+    </pre>
+    <p>
+    在router对应的页⾯中，需要设置name属性，如下
+    </p>
+    <pre>
+    <code>
+        exportdefault{
+            name:'testKA',// keep-alive include name
+            data(){return{}},
+            activated(){
+                缓存的页⾯每次进⼊都会进⾏的⽣命周期
+               // keepalive
+            },
+        }
+    </code>
+    </pre>
+    <h3>
+        此外 include还有其他的一些用法
+    </h3>
+    <pre>
+        <code>
+            <!--逗号分隔字符串-->
+            <keep-alive include="a,b">
+            <component :is="view"></component>
+            </keep-alive>
+            <!--正则表达式(使⽤`v-bind`)-->
+            <keep-alive :include="/a|b/">
+            <component :is="view"></component>
+            </keep-alive>
+            <!--数组(使⽤`v-bind`)-->
+            <keep-alive :include="['a', 'b']">
+            <component :is="view"></component>
+            </keep-alive>
+        </code>
+    </pre>
+    <h3>
+        exclude⽤法与include⽤法相同，代表不被缓存的组件。此外，keep-alive还有⼀个max属性，代表缓存组件最⼤数量，⼀旦这个数字达到
+        了，在新实例被创建之前，已缓存组件中最久没有被访问的实例会被销毁掉。
+    </h3>
+    <pre>
+        <code>
+            <keep-alive :max="10">
+            <component :is="view"></component>
+            </keep-alive>
+        </code>
+    </pre>
+    <a href = "https://wenku.baidu.com/view/901201cdbbf67c1cfad6195f312b3169a551ea4f.html"> 原文链接 </a>
+    </body>
+</html>

@@ -15,6 +15,215 @@
         通常执行npm install 也会有同样的问题，也有可能是宝塔命令没有切换到root账号
 
     </p>
+    <h1> 宝塔配置 </h1>
+    <h2> nginx 配置 </h2>
+    <p>
+        在网站配置中加上关键的一行 location  <br>
+        <pre>
+            <code>
+                location / {
+                    try_files $uri $uri/ /index.php?$query_string;
+                }
+            </code>
+        </pre>
+        配置完了是这样的
+        <pre>
+            <code>
+                server
+                {
+                    listen 80;
+                    server_name shop.weixiubang.club;
+                    index index.php index.html index.htm default.php default.htm default.html;
+                    root /www/wwwroot/laravel/public;
+                    location / {
+                         try_files $uri $uri/ /index.php?$query_string;
+                    }
+                    location ~ /\.(?!well-known).* {
+                        deny all;
+                    }
+                    location = /favicon.ico { access_log off; log_not_found off; }
+                    location = /robots.txt  { access_log off; log_not_found off; }
+                    #SSL-START SSL相关配置，请勿删除或修改下一行带注释的404规则
+                    #error_page 404/404.html;
+                    #SSL-END
+
+                    #ERROR-PAGE-START  错误页配置，可以注释、删除或修改
+                    #error_page 404 /404.html;
+                    #error_page 502 /502.html;
+                    #ERROR-PAGE-END
+
+                    #PHP-INFO-START  PHP引用配置，可以注释或修改
+                    include enable-php-74.conf;
+                    #PHP-INFO-END
+
+                    #REWRITE-START URL重写规则引用,修改后将导致面板设置的伪静态规则失效
+                    include /www/server/panel/vhost/rewrite/shop.weixiubang.club.conf;
+                    #REWRITE-END
+
+                    #禁止访问的文件或目录
+                    location ~ ^/(\.user.ini|\.htaccess|\.git|\.svn|\.project|LICENSE|README.md)
+                    {
+                        return 404;
+                    }
+
+                    #一键申请SSL证书验证目录相关设置
+                    location ~ \.well-known{
+                        allow all;
+                    }
+
+                    location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
+                    {
+                        expires      30d;
+                        error_log /dev/null;
+                        access_log /dev/null;
+                    }
+
+                    location ~ .*\.(js|css)?$
+                    {
+                        expires      12h;
+                        error_log /dev/null;
+                        access_log /dev/null;
+                    }
+                    access_log  /www/wwwlogs/shop.weixiubang.club.log;
+                    error_log  /www/wwwlogs/shop.weixiubang.club.error.log;
+                }
+            </code>
+        </pre>
+        location 匹配的一些规则<br>
+        location ^~/hulloworld 正则区分大小写匹配前缀，优先级高于正则匹配 ~/hulloworld,不论~/hulloworld在配置文件中位置在 ^~/hulloworld之前也先处理^~/hulloworld。如果匹配到了则不再继续匹配其他。
+        匹配 http://shop.weixiubang.club/hulloworld, http://shop.weixiubang.club/hulloworld/122 不匹配http://shop.weixiubang.club/hulloWorld,http://shop.weixiubang.club/kkk/hulloworld<br>
+
+        location =/hulloworld  精确匹配不区分大小写，优先级高于^~/hulloworld, 如果匹配成功停止其他匹配。<br>
+        匹配 http://shop.weixiubang.club/hulloworld 不匹配http://shop.weixiubang.club/hulloworld/122<br>
+
+        location ~hulloworld  区分大小写的正则匹配。如果匹配成功停止其他匹配。<br>
+        匹配 http://shop.weixiubang.club/hulloworld, http://shop.weixiubang.club/kkk/hulloworld, http://shop.weixiubang.club/kkkhulloworldllll.不匹配http://shop.weixiubang.club/hulloWorld<br>
+
+        location ~*hulloworld  不区分大小写的正则匹配。如果匹配成功停止其他匹配。这个和上一个谁先定义谁先匹配<br>
+        匹配 http://shop.weixiubang.club/hulloworld, http://shop.weixiubang.club/kkkhulloworldllll, http://shop.weixiubang.club/hulloWorld<br>
+
+        location /hulloworld 前缀包含字符匹配，优先级低于正则,如果匹配成功停止其他匹配。<br>
+        匹配 http://shop.weixiubang.club/hulloworld, http://shop.weixiubang.club/hulloworldllll,不匹配 http://shop.weixiubang.club/kkk/hulloworld,http://shop.weixiubang.club/hulloWorld<br>
+
+        location / 优先级最低，匹配所有。相当于default。所有不能匹配的都到这个里来,如果匹配成功停止其他匹配。<br>
+        匹配 http://shop.weixiubang.club/hulloworld, http://shop.weixiubang.club/hulloworldllll, http://shop.weixiubang.club/hulloWorld<br>
+
+        location  ~\.php$ 正则匹配所有以.php结尾，例如
+        <pre>
+            <code>
+                location  ~  \.php$  {
+                    root           html;
+                    fastcgi_pass   127.0.0.1:9000;    #http 代理, #将请求转发给本机9000端口，PHP解释器
+                    fastcgi_index  index.php;
+                    #fastcgi_param   SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+                    include        fastcgi.conf;       #加载其他配置文件
+                }
+                ## 区分大小写，匹配不以.xhtml结尾的
+                location !~ \.xhtml$ {
+                    #规则F
+                }
+                location !~* \.xhtml$ {
+                    #规则G
+                }
+            </code>
+        </pre>
+        匹配优先级：精确匹配 >（^~) > 正则匹配 > 字符串（长 > 短）<br>
+
+        deny all;  禁止所有IP的访问，意思是用解析域名可以访问，直接用IP加端口的方式访问不到
+        allow: 192.14.255.25, 允许该域名访问<br>
+    </p>
+    <h3>
+        配置中的try_files
+    </h3>
+    <h4>
+        try_files是nginx中http_core核心模块所带的指令，主要是能替代一些rewrite的指令，提高解析效率。官网的文档为http://nginx.org/en/docs/http/ngx_http_core_module.html#try_files
+    </h4>
+    <p>
+
+        关键点1：按指定的file顺序查找存在的文件，并使用第一个找到的文件进行请求处理<br>
+
+    　　关键点2：查找路径是按照给定的root或alias为根路径来查找的<br>
+
+    　　关键点3：如果给出的file都没有匹配到，则重新请求最后一个参数给定的uri，就是新的location匹配<br>
+
+    　　关键点4：如果是格式2，如果最后一个参数是 = 404 ，若给出的file都没有匹配到，则最后返回404的响应码<br>
+        举例。
+        <pre>
+            <code>
+                location /images/ {
+                    root /opt/html/;
+                    try_files $uri   $uri/  /images/default.gif;
+                }
+                比如 请求 127.0.0.1/images/test.gif 会依次查找 1.文件/opt/html/images/test.gif   2.文件夹 /opt/html/images/test.gif/下的index文件  3. 请求127.0.0.1/images/default.gif
+
+                4.其他注意事项
+                1.try-files 如果不写上 $uri/，当直接访问一个目录路径时，并不会去匹配目录下的索引页  即 访问127.0.0.1/images/ 不会去访问  127.0.0.1/images/index.html
+            </code>
+        </pre>
+        其它用法
+        <pre>
+            <code>
+            location / {
+                try_files /system/maintenance.html
+                          $uri $uri/index.html $uri.html
+                          @mongrel;
+            }
+
+            location @mongrel {
+                proxy_pass http://mongrel;
+            }
+
+            </code>
+        </pre>
+        以上中若未找到给定顺序的文件，则将会交给location @mongrel处理（相当于匹配到了@mongrel来匹配）
+    </p>
+    <h3> env 文件修改 </h3>
+    <p>
+        APP_NAME=Laravel学院。 你的app名称<br>
+        APP_ENV=production   一般是：开发: local测试: testing预上线: staging正式环境: production.这个东西，理论是可以任何值，就看你用不用到。实际常用的，者几种，去根据环境加载不同的配置、调试日志罢了<br>
+        APP_DEBUG=false. debug详情隐藏。<br>
+        APP_URL=http://blog.laravelacademy.org. 修改为你的域名 <br>
+    </p>
+    <h3> 优化 </h3>
+    <p>
+        composer install --optimize-autoloader --no-dev<br>
+        php artisan config:cache<br>
+        php artisan route:cache<br>
+        php artisan view:cache<br>
+
+        只要线上项目更新了路由文件，就需要清理缓存route:cache， config 也一样
+    </p>
+
+    <h3> 部署后无法打开图片 </h3>
+
+    <p> 原因是上线后只能打开public 文件夹，所以要执行命令将public文件夹创建一个软连接到laravel storage文件夹
+        php artisan storage:link<br>
+        The [/www/wwwroot/laravel/public/storage] link has been connected to [/www/wwwroot/laravel/storage/app/public].<br>
+        The links have been created.<br>
+        出现上述提示表示创建软连接成功。
+        百度说有的需要删除系统文件夹下面的storage 文件夹。我就是删除后执行php artisan storage:link 报错php artisan storage:link In Compiler.php line 36: Please provide a valid cache path,提示提供一个缓存路径。然后我又在项目目录下创建了三个文件夹。<br>
+         ✗ mkdir -p storage/framework/views<br>
+         ✗ mkdir -p storage/framework/cache<br>
+         ✗ mkdir -p storage/framework/sessions<br>
+        确保 storage 目录结构如下:<br>
+        <pre>
+            <code>
+                ./storage
+                ├── app
+                ├── framework
+                │   ├── cache
+                │   ├── sessions
+                │   └── views
+                └── logs
+                    └── lumen.log
+            </code>
+        </pre>
+        然后执行了chmod -R 755 storage, chown -R www:www storage <br>
+        再执行了 php artisan storage:link 才成功。
+    </p>
+    <a href ="https://zhuanlan.zhihu.com/p/378026632"> deny 和 allow </a>
+    <a href="https://wenku.baidu.com/view/131b26ed88d63186bceb19e8b8f67c1cfbd6ee57.html">传送门</a>
+    <a href ="https://laravelacademy.org/post/9749"> 部署教程</a>
 
 </body>
 </html>
