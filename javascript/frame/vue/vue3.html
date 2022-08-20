@@ -71,6 +71,18 @@ export default defineComponent({
       console.log(v1);
       console.log(v2);
     });
+    watch(
+        () => state.checkedRepairItemIds,
+        (nval, oval)=> {
+            console.log("watch______repairItems",nval,oval)
+        },
+        {
+            // 深层监听
+            deep: true,
+            // 立即执行
+            immediate: true,
+        }
+    )
   },
   render() {
     return (
