@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <title>
+        组件
+    </title>
+
+</head>
+<body>
+    <h3> 组件方法写法 </h3>
+    <p>在vue2中我们自定义组件的方法在父组件中使用时可以使用this.$refs.方法名的方式进行使用
+    而在vue3中想使用自定义组件中的方法或者值时需要使用 编译器宏将方法和值暴露出来
+    具体说明看文档 单文件组件
+    </p>
+    <p> 直接上代码</p>
+    <pre>
+        <code>
+            <template>
+                给子组件起个名字吧=>{{name}}
+            </template>
+            <script setup>
+            import { ref, defineExpose} from 'vue'
+            const name = ref('')
+            const setName = (v) => {
+              name.value = v
+            }
+            defineExpose({
+              setName
+            })
+            </script>
+            <style lang="scss" scoped></style>
+            <template>
+                 <child ref="child"></child>
+            </template>
+            <script setup>
+            import { ref } from 'vue'
+            // ...引入组件
+            const child = ref(null)
+            // 这里的ref(null) = this.$refs vue3中使用refs需要在底部声明
+
+            // 使用子组件的方法
+            child.value.setName('小组件')
+
+            </script>
+            <style lang="scss" scoped></style>
+            ————————————————
+            版权声明：本文为CSDN博主「日夜熬夜使我黑眼圈」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+            原文链接：https://blog.csdn.net/qiyujie_123/article/details/123504482
+        </code>
+    </pre>
+</body>
+</html>
