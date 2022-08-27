@@ -10,6 +10,11 @@
             <pre>
                 <span>  全局方法挂载 </span> <a href="http://www.0daybug.com/posts/f651d15a/index.html" target="_blank"> 传送门 </a>
             </pre>
+            <h3>
+                调用子组件方法，
+            </h3>
+            <p>1. 模板中ref="child" 设置子组件名。 2. setup 中 const child = ref(null) 获取子组件。 3. 调用子组件child.value.fun(), 4. setup 中把child值return 出去</p>
+            <a href="https://www.jb51.net/article/257537.htm" target="_blank"> Vue3 setup () {} 中使用 ref，如何获取到子元素，并调用方法 </a>
 
         </body>
     </head>
