@@ -18,11 +18,14 @@
                 给子组件起个名字吧=>{{name}}
             </template>
             <script setup>
+            // defineExpose 只有在setup <script setup>语法糖中使用，没有使用setup语法糖就在setup中
+            // 引入expose setup(props, {expose}) { }
             import { ref, defineExpose} from 'vue'
             const name = ref('')
             const setName = (v) => {
               name.value = v
             }
+            // 没有使用setup语法糖的情况下替换为expose({setName})
             defineExpose({
               setName
             })
@@ -39,11 +42,12 @@
 
             // 使用子组件的方法
             child.value.setName('小组件')
-
+            // return 出去，原文中缺少了这个环节
+            return {
+                child
+            }
             </script>
             <style lang="scss" scoped></style>
-            ————————————————
-            版权声明：本文为CSDN博主「日夜熬夜使我黑眼圈」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
             原文链接：https://blog.csdn.net/qiyujie_123/article/details/123504482
         </code>
     </pre>
