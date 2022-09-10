@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<head>
+    <title>
+    setup 语法糖
+
+    </title>
+</head>
+<body>
+    <h3> setup 语法糖 </h3>
+    <p>
+    单文件组件 script setup
+    为了方便的使用setup,可以通过<script setup> ，它是在单文件组件 (SFC) 中使用组合式 API的编译时语法糖。相比于普通的 <script> 语法，它具有更多优势：
+
+    更少的样板内容，更简洁的代码。
+    能够使用纯 Typescript 声明 props 和抛出事件。
+    更好的运行时性能 (其模板会被编译成与其同一作用域的渲染函数，没有任何的中间代理)。
+    更好的 IDE 类型推断性能 (减少语言服务器从代码中抽离类型的工作)。
+
+    作者：梦安web开发
+    链接：https://www.jianshu.com/p/9a5d15bfaecb
+    来源：简书
+    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+    当使用 <script setup> 的时候，任何在 <script setup> 声明的顶层的绑定 (包括变量，函数声明，以及 import引入的内容) 都能在模板中直接使用：
+    因为不能定义name，那么name单位用script标签来定义
+    </p>
+    <pre>
+    <code>
+
+       <template>
+          <div>
+            <h1 :style="{color:color}">{{title}}:{{count}}</h1>
+            <a-button @click="btnClick" type="primary">点击</a-button>
+          </div>
+        </template>
+        <script lang="ts">
+          export default {
+            name:"SetupViewTest"
+          }
+        </script>
+        <script setup lang="ts">
+        import {computed, ref, toRefs} from "vue";
+
+          const props = defineProps({
+            title:{
+              type:String,
+              required:true,
+            },
+            init:{
+              type:Number,
+              default:8,
+            },
+          });
+          const emit = defineEmits([]);
+          const count = ref(props.init);
+          const btnClick = function (){
+            count.value++;
+          };
+          const color = computed(()=> (count.value > 12) ? "red": "black");
+        </script>
+    </code>
+    </pre>
+    <a href="https://www.cnblogs.com/-pdd/p/16003658.html" > setup 语法糖详解 </a>
+    <a href="https://www.cnblogs.com/-pdd/p/16003658.html" > setup 语法糖使用 </a>
+</body>
+</html>
