@@ -16,5 +16,12 @@
     解决方法为删除public文件夹下storage文件夹，
     重新执行命令 php artisan storage:link,
     </p>
+    <h3> 报错 </h3>
+    <p>
+        General error: 1267 Illegal mix of collations (gbk_chinese_ci,IMPLICIT) and (utf8mb4_unicode_ci,COERCIBLE) for operation 'like'
+    </p>
+    <p>
+    这是用like比较的变量和数据库字符集不匹配，修改表字符集就可以了。
+    </p>
 </body>
 </html>
