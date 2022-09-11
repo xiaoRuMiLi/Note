@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+
+<head>
+	<title>
+		Vue 项目命名规范
+	</title>
+</head>
+<body>
+<artical>
+	<h3>views 命名 单个单词小写格式</h3>
+	<p>
+		views 文件夹下面是由 以页面为单位的vue文件 或者 模块文件夹 组成的，放在 src 目录之下，与 components、assets 同级。
+		views 下的文件夹命名
+		views 下面的文件夹代表着模块的名字
+		由名词组成（car、order、cart）
+		单词只能有一个（good: car order cart）（bad: carInfo carpage）
+		尽量是名词（good: car）（bad: greet good）
+		以小写开头（good: car）（bad: Car）
+	</p>	
+	<p>
+		<strong>views 下的 vue 文件命名， 大驼峰格式</strong>
+		views 下面的 vue 文件代表着页面的名字
+		放在模块文件夹之下
+		只有一个文件的情况下不会出现文件夹，而是直接放在 views 目录下面，如 Login Home
+		尽量是名词
+		大写开头，开头的单词就是所属模块名字（CarDetail、CarEdit、CarList）
+		名字至少两个单词（good: CarDetail）（bad: Car）
+		常用结尾单词有（Detail、Edit、List、Info、Report）
+		以 Item 结尾的代表着组件（CarListItem、CarInfoItem）
+	</p> 
+	<p>
+		<strong> components 组件的命名， </strong>
+        全局使用的组件
+		单文件模式使用大驼峰命名法 如 MainInfoPannel.vue index.vue 除外.
+		紧密耦合的组件名例如： TodoItem.vue, TodoList.vue, TodoButton.vue. 都以Todu打头，命名也有一定规律。
+		文件夹模式使用 ： components 文件夹下代表组件的文件夹 全部采用大驼峰命名， 如 TodoList文件夹。 而且只允许一层，文件夹下必有index.vue文件， 其它的js 或者css 文件也用index命名。
+		组件的name属性使用小写短横线命名如 todo-list 。
+
+
+	</p>
+    <p>
+    	<strong>
+			vue 方法命名
+			vue 方法放置顺序
+		</strong>
+			components
+			props
+			data
+			created
+			mounted
+			activited
+			update
+			beforeRouteUpdate
+			metods
+			filter
+			computed
+			watch
+		
+    </p>
+    <p>
+		<strong>method 自定义方法命名 小驼峰格式</strong>
+		动宾短语（good：jumpPage、openCarInfoDialog）（bad：go、nextPage、show、open、login）
+		ajax 方法以 get、post 开头，以 data 结尾（good：getListData、postFormData）（bad：takeData、confirmData、getList、postForm）
+	</p>
+	<p>
+		<stong>事件方法以 on 开头（onTypeChange、onUsernameInput）小驼峰格式</stong>
+		init、refresh 单词除外
+		尽量使用常用单词开头（set、get、open、close、jump）
+		驼峰命名（good: getListData）（bad: get_list_data、getlistData）
+	</p>
+	<p>
+		<strong> data props 方法注意点 </strong>
+		使用 data 里的变量时请先在 data 里面初始化
+		props 指定类型，也就是 type
+		props 改变父组件数据 基础类型用 $emit ，复杂类型直接改
+		ajax 请求数据用上 isLoading、isError 变量
+		不命名多余数据，现在是详情页、你的数据是 ajax 请求的，那就直接声明一个对象叫 d，而不是每个字段都声明
+		表单数据请包裹一层 form
+		生命周期方法注意点
+		不在 mounted、created 之类的方法写逻辑，取 ajax 数据，
+		在 created 里面监听 Bus 事件
+
+		Vue命名规范
+		https://blog.51cto.com/u_15127642/3835437
+	</p>
+	<p>
+		<strong> local 数据规范 </strong>
+		保存local数据， 以当前页面加下划线加数据名命名， 比如保存Login.vue 的state变量， setLocal("Login_state", value);
+
+	</p>
+</article>
+</body>
+</html>
