@@ -25,5 +25,27 @@
 		用于删除数据。
 	</p>
 	<a href="https://blog.csdn.net/m0_38010595/article/details/112793938"> 5种请求方法的用法 </a>
+	<h3> 处理进度 使用axios的onUploadProgress制作上传进度条--以及onUploadProgress的源码解读 </h3>
+	<pre>
+		<code>
+			const config = {
+				onUploadProgress: (progress) => {
+					// 格式化成百分数
+					this.progress = Math.floor(progress.loaded/progress.total*100) + '%'
+				}
+			}
+			axios.post(url,data,config).then(...)
+		</code>
+		progress.loaded表示当前上传的数据大小，progress.total表示整个要上传的数据大小。拿到当前上传数据的百分比后传给Element的进度条组件就可以实现啦。
+
+		刚开始我还以为axios的onUploadProgress封装的多好，帮开发人员减轻了很多工作，抱着这种心情去看了一下axios onUploadProgress的实现，原来XMLHttpRequest本身就支持progress事件，ajax可以添加事件监听，没想到吧。axios的onUploadProgress实现就这？XMLHttpRequest还可以添加loadstart、loadend等事件监听。
+
+
+		这里是MDN对ProgressEvent介绍，onUploadProgress的progress参数对象的用法和作用都与之一致。
+
+		<a href ="https://blog.csdn.net/RkHker/article/details/109316494">
+			原文链接
+		</a>
+	</pre>
 	</body>
 </html>
