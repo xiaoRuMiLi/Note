@@ -8,7 +8,24 @@
 	<h3>
 		axios常见5种请求方法
 	</h3>
-	<p>
+	<pre>
+		为方便起见，axios为所有支持的请求方法提供了别名
+		params 是将与请求一起发送的 URL 参数，对应后台中的query
+		data 是作为请求主体被发送的数据，对应后台中的body
+	</pre>
+	<pre>
+		axios.request(config)
+		axios.get(url[, config])  // 只支持 params 传参
+		axios.delete(url[, config])  // 只支持 params传参
+		axios.head(url[, config]) // 只支持 params传参
+		axios.post(url[, data[, config]]) // 同时支持  data 和 params
+		axios.put(url[, data[, config]]) // 同时支持  data 和 params
+		axios.patch(url[, data[, config]]) // 同时支持  data 和 params
+		————————————————
+		版权声明：本文为CSDN博主「AI.IRS」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+		原文链接：https://blog.csdn.net/Kris_xiaoxiao/article/details/125676627
+	</pre>
+	<pre>
 		get请求
 		用于获取数据。
 
@@ -23,7 +40,7 @@
 
 		delete请求
 		用于删除数据。
-	</p>
+	</pre>
 	<a href="https://blog.csdn.net/m0_38010595/article/details/112793938"> 5种请求方法的用法 </a>
 	<h3> 处理进度 使用axios的onUploadProgress制作上传进度条--以及onUploadProgress的源码解读 </h3>
 	<pre>
@@ -47,5 +64,49 @@
 			原文链接
 		</a>
 	</pre>
+	<h3>
+		axios几种及提交方法写法
+	</h3>
+	<p>
+		<pre>
+		let params={}
+		*/get和delete用法一样：/*
+		axios.get("url",{params:params})   =>   axios.get("url",{params})
+		axios.delete("url",{params:params})  =>   axios.delete("url",{params})
+
+		*/post/put/patch用法一样：/*
+		（1）传参格式为 raw (JSON格式) 
+		axios.post("url",params:params)    =>   axios.post("url",params)
+		axios.put("url",params:params)  =>   axios.put("url",params)
+
+		(2) 传参格式为 formData 
+		let formData=new FormData();
+		formData.append("a","123");
+		axios.post("url",fromData);\
+
+		(3) 传参格式为 query 形式  
+		第一种情况：使用$qs.stringify
+
+		import Qs from 'qs' //引入方式
+		Vue.prototype.$qs = Qs //全局加载
+		this.$qs.stringify(data); //使用方式
+		this.$qs.parse(data); //使用方式
+		var readyData=this.$qs.stringify({
+		   id:1234,
+		   name:user
+		});
+		axios.post("/notice",readyData)  .then((res) => {return res})
+
+		第二种情况：使用URLSearchParams
+		在浏览器中，您可以使用URLSearchParams API，如下所示：
+		var params = new URLSearchParams();
+		params.append('param1', 'value1');
+		params.append('param2', 'value2');
+		axios.post('/foo', params);
+
+		请注意，所有浏览器都不支持URLSearchParams，但是有一个polyfill可用（确保polyfill全局环境）。
+		</pre>
+	</p>
+	<a href="https://www.kancloud.cn/yunye/axios/234845"> 中文文档 </a>
 	</body>
 </html>
