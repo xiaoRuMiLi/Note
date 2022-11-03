@@ -40,5 +40,22 @@
         <p>
             devDependencies 节点下的模块是我们在开发时需要用的，比如项目中使用的 gulp ，压缩css、js的模块。这些模块在我们的项目部署后是不需要的，所以我们可以使用 -save-dev 的形式安装。像 express 这些模块是项目运行必备的，应该安装在 dependencies 节点下，所以我们应该使用 -save 的形式安装
         </p>
+
+        <h2> npm install 报错链接git错 </h2>
+        <p>
+            <pre>
+            Error while executing:
+                npm ERR! D:\Git\cmd\git.EXE ls-remote -h -t git://github.com/adobe-webplatform/eve.git
+                npm ERR!
+                npm ERR! fatal: unable to connect to github.com:
+                npm ERR! github.com[0: 20.205.243.166]: errno=Unknown error
+            </pre>
+            报错是ssh链接 和 config --global 配置问题
+            <br>
+            <a href="https://blog.csdn.net/volcano2580/article/details/122731853">
+                vue-element-admin安装依赖报错解决
+            </a>
+        </p>
+
     </body>
 </html>

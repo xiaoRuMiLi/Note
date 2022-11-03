@@ -52,5 +52,17 @@
 
     <h2> git clean -d -fx </h2>
     <p> 这一条命令要慎重使用，这个命令会把远程仓库中没有的文件而本地仓库中有的文件从本地仓库中删除 </p>
+
+    <h2> ssh 链接</h2>
+    <p>
+        <pre>
+            输入命令 ssh -T git@github.com 查看是否链接成功，在输入yes后如果出现了：You've successfully authenticated, but GitHub does not provide shell access 。那就说明，已经成功连上了GitHub。接下来还需要简单的设置一些东西
+        </pre>
+    </p>
+    <h2> 查看配置信息</h2>
+    <p>
+    git config --list
+    </p>
+
 </body>
 </html>
