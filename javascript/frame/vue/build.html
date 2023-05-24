@@ -3,6 +3,45 @@
     <title>部署VUE</title>
 </head>
 <body>
-    <h1> </h1>
+    <h1> vue3 部署 </h1>
+    <h3> 环境配置文件</h3>
+    
+    <pre>
+        首先在项目建立运行配置文件.env.development和.env.peoduction 两个文件, 
+        文件中的变量 格式为 置
+        必须以VITE开头例如 VITE_BASIC_API = 'http://mqy53465878.cn/', 
+        在vite.config.js 文件中可以通过不同的运行命令来读取这两个文件中的变量. 例如运行 npm run dev 则读取到.env.development中的变量. npm run build 则是读取.env.peoduction
+        中的变量值.
+        export default defineConfig(({command, mode}) => {
+            // 获取当前环境的配置,就是.env.devalopment 里面的值,或.envproduction里面的值,
+            const config = loadEnv(mode, './');
+            return {
+                mode: 'development',
+                plugins: [
+                    vue(),
+                    // 好像是vant按需引入的配置
+                    styleImport({
+                        resolves: [VantResolve()],
+                        libs: [
+                            {
+                            libraryName: 'vant',
+                            esModule: true,
+                            resolveStyle: name => `../es/${name}/style`
+                            }
+                        ]
+                    }),
+                ],
+            }
+        })
+    </pre>
+    <h3> 静态资源 </h3>
+    <pre> vue3 开发时静态资源都存放在public/static文件中, 打包后静态资源会打包到dist/static文件中,这个时候会访问不到可以直接将static文件夹拿到dist文件夹外面,
+        也就是放到服务器根目录.这样就能够正常访问. 开发的时候引用该文件中的文件可以都使用绝对路径引用.
+    </pre>
+    <h3> vite.config.js </h3>
+    <pre>
+        //报错 https://manager.weixiubang.club/assets/index.af39c231.js net::ERR_ABORTED 404,
+        base: /dist/, // 静态资源路由前缀, // 在生产中服务时的基本公共路径, 这个特别重要.如果设置错误  会出现空白页.
+    </pre>
 </body>
 </html>
