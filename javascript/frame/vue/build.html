@@ -4,6 +4,12 @@
 </head>
 <body>
     <h1> vue3 部署 </h1>
+    <h1>
+        运行命令
+    </h1>
+    <pre>
+        npm run build 运行打包命令
+    </pre>
     <h3> 环境配置文件</h3>
     
     <pre>
@@ -35,13 +41,44 @@
         })
     </pre>
     <h3> 静态资源 </h3>
-    <pre> vue3 开发时静态资源都存放在public/static文件中, 打包后静态资源会打包到dist/static文件中,这个时候会访问不到可以直接将static文件夹拿到dist文件夹外面,
-        也就是放到服务器根目录.这样就能够正常访问. 开发的时候引用该文件中的文件可以都使用绝对路径引用.
+    <pre> vue3 开发时静态资源都存放在public/static文件中, 打包后静态资源会打包到dist/static文件中,如果上传网站上传的是整个dist目录,
+        这个时候会访问不到.可以直接将static文件夹拿到dist文件夹外面,也就是放到服务器根目录.这样就能够正常访问. 
+        开发的时候引用public/static中的文件都应该使用绝对路引用, url="/static/image/beijing.jpg" 注意前面不用加public也可以引用到
     </pre>
-    <h3> vite.config.js </h3>
+    <h3> vite.config.js base</h3>
     <pre>
+        base: /dist/ 默认值为'./'  // 静态资源路由前缀, // 在生产中服务时的基本公共路径, 这个特别重要.如果设置错误  会出现空白页.
         //报错 https://manager.weixiubang.club/assets/index.af39c231.js net::ERR_ABORTED 404,
-        base: /dist/, // 静态资源路由前缀, // 在生产中服务时的基本公共路径, 这个特别重要.如果设置错误  会出现空白页.
+        这里如果用./默认值,那么是相对路径.打包后assets 文件夹内的文件路径就变成了页面路由加上/assets/index.af39c231.js, 
+        例如https://manager.weixiubang.club/main/homme/assets/index.af39c231.js,也访问不到. 建议按下面的方法配置:
+        如果你是将整个dist目录上传到网站根目录,这里就配置'/dist/',不要加点. 如果是上传dist里面的文件到根目录这里就配置'/',不要加点.
+        如果上传的时候上传的是dist里面的文件,则这里使用默认值./,如果是连同dist目录一起上传的话这里设置成/dist/
     </pre>
+    <h3> 网站配置文件</h3>
+    <pre> 这里使用的是nginx, 以下是配置文件
+        location /{
+        #在nginx配置中，root指定了文档根目录，对于一个请求，nginx会查找文档根目录下的文件或文件夹。如果root没有设置，则nginx默认使用安装时的默认目录。
+        root /www/wwwroot/manager.weixiubang.club;
+        # 优先根据访问路径中的文件名进行查找如果找不到文件则重定向到@route
+        try_files $uri $uri/ @router;
+        # index 请求的文件路径中没有文件名的时候指定默认文件名
+        index index.html;
+      }
+      location / 是所有的访问都服从这个原则
+    </pre>
+    <h3> axios 访问代理设置</h3>
+    <pre>
+        axios 访问后台的时候都是访问的当前域名,所以要将当前的域名的访问代理出去才能访问.
+        部署后一般会出现访问后台404的问题, 这是因为网站设置中没有设置好跨域访问, 服务器中设置跨域访问如下
+        location /laravel { 
+            # 跨域设置,意思是app中访问后台服务器manager.weixiubang.club/laravel会被
+            #代理到http://staff.weixiubang.club/Api,这个是设置后才能访问后台资源
+            proxy_pass http://staff.weixiubang.club/Api;
+        }
+        将所有/laravel 开头的访问都代理到你的目标域名http://staff.weixiubang.club/Api.
+        所以开发色时候所有访问都有统一的baseUrl 就很重要了
+    </pre>
+    <a href="https://www.cnblogs.com/web-learn/p/15670257.html"> 参考文献 </a>
+
 </body>
 </html>
